@@ -2,14 +2,14 @@
 
 function customerAddOrUpdate() {
 
-    alert("ok");
+
     var customer={
         id : $("#txtCusID").val(),
         name : $("#txtCusName").val(),
         address : $("#txtCusAddress").val(),
         tp : $("#txtCusTP").val()
     }
-
+    alert("ok");
     $.ajax({
         url: "customer",
         method: "POST",
@@ -146,11 +146,14 @@ $("#btnCustomerDelete").click(function () {
 
 
 //customer validation
+/*
 const cusIDRegEx = /^(C00-)[0-9]{1,3}$/;
 const cusNameRegEx = /^[A-z ]{5,20}$/;
 const cusAddressRegEx = /^[0-9/A-z. ,]{5,}$/;
 const cusTpRegEx = /^(078|070|071|075|077|091|011|074|072|076)?[0-9]{7}$/;
+*/
 
+/*
 
 $("#btnCustomer").prop('disabled', true);
 
@@ -232,6 +235,7 @@ function validate(e) {
     }
 }
 
+*/
 
 
 
