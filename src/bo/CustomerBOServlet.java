@@ -15,7 +15,7 @@ public class CustomerBOServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        JsonReader reader = Json.createReader(req.getReader());
+        /*JsonReader reader = Json.createReader(req.getReader());
         JsonObject jsonObject = reader.readObject();
 
         String id=jsonObject.getString("id");
@@ -23,6 +23,6 @@ public class CustomerBOServlet extends HttpServlet {
         String address=jsonObject.getString("address");
         String tp=jsonObject.getString("tp");
 
-        System.out.println(id+" "+name+" "+address+" "+tp);
+        System.out.println(id+" "+name+" "+address+" "+tp);*/
     }
 }

@@ -3,7 +3,7 @@
 function customerAddOrUpdate() {
 
 
-    var customer={
+    var cus={
         id : $("#txtCusID").val(),
         name : $("#txtCusName").val(),
         address : $("#txtCusAddress").val(),
@@ -14,7 +14,7 @@ function customerAddOrUpdate() {
         url: "customer",
         method: "POST",
         contentType :"application/json",
-        data : JSON.stringify(customer),
+        data : JSON.stringify(cus),
 
         success : function (res){
 
