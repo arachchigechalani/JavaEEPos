@@ -1,4 +1,4 @@
-loadAllCustomer();
+//loadAllCustomer();
 
 function customerAddOrUpdate() {
 
@@ -27,7 +27,7 @@ function customerAddOrUpdate() {
     var address = $("#txtCusAddress").val();
     var tp = $("#txtCusTP").val();*/
 
-    var customerExist = 0;
+    /*var customerExist = 0;
     for (var i in customerDB) {
         if (id == customerDB[i].getId()) {
             alert("Customer Allready Exist !");
@@ -40,29 +40,18 @@ function customerAddOrUpdate() {
         alert("Customer Added SuccessFull..")
     }
 
-    showUpdateModal();
+    showUpdateModal();*/
 
 }
 
 $("#btnSave").click(function () {
-
-    $.ajax({
-        url : "customer",
-        method : "GET",
-
-        success : function (res) {
-
-        }
-    })
-
-
-    /*customerAddOrUpdate();*/
+    customerAddOrUpdate();
 
 
 });
 
 
-function showUpdateModal() {
+/*function showUpdateModal() {
     $("#customerTable>tr").on('dblclick', function (e) {
 
         $("#updateCustomer #updateCusID").val($(this).children(':eq(0)').text());
@@ -74,7 +63,7 @@ function showUpdateModal() {
         $("#updateCustomer").modal('show');
 
     });
-}
+}*/
 
 function loadAllCustomer() {
     /*$("#customerTable").empty();
@@ -85,7 +74,7 @@ function loadAllCustomer() {
 }
 
 /*search customer*/
-var customerExist = 0;
+//var customerExist = 0;
 /*$("#customerSearchBtn").click(function () {
 
     var txtsearch = $("#txtSearchCusID").val();
