@@ -15,6 +15,8 @@ public class CustomerBOServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        System.out.println("git");
         /*JsonReader reader = Json.createReader(req.getReader());
         JsonObject jsonObject = reader.readObject();
 
