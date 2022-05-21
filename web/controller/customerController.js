@@ -1,30 +1,35 @@
-//loadAllCustomer();
+loadAllCustomer();
 
 function customerAddOrUpdate() {
-    var id = $("#txtCusID").val();
-    var    name = $("#txtCusName").val();
-     var   address = $("#txtCusAddress").val();
-     var   tp = $("#txtCusTP").val();
 
-    var cus={
-        id :id,
-        name : name,
-        address : address,
-        tp : tp
+    var id = $("#txtCusID").val();
+    var name = $("#txtCusName").val();
+    var address = $("#txtCusAddress").val();
+    var tp = $("#txtCusTP").val();
+
+    var cus = {
+        id: id,
+        name: name,
+        address: address,
+        tp: tp
     }
 
     $.ajax({
         url: "customer",
         method: "POST",
-        contentType :"application/json",
-        data : JSON.stringify(cus),
+        contentType: "application/json",
+        data: JSON.stringify(cus),
 
-        success : function (res){
-            if (res.status==200){
+        success: function (res) {
+
+            if (res.status == 200) {
                 alert(res.message);
-            }else if (res.status==400){
+                //clearAll();
+                loadAllCustomer();
+
+            } else if (res.status == 400) {
                 alert(res.data);
-            }else {
+            } else {
                 alert(res.data);
             }
         }
@@ -55,7 +60,7 @@ function customerAddOrUpdate() {
 
 $("#btnSave").click(function () {
     customerAddOrUpdate();
-
+    loadAllCustomer();
 
 });
 
@@ -75,6 +80,38 @@ $("#btnSave").click(function () {
 }*/
 
 function loadAllCustomer() {
+
+    alert("load all Customer;");
+
+    $("#customerTableJson").empty();
+
+    $.ajax({
+        url: "customer?option=GETALL",
+        method: "GET",
+        success: function (resp) {
+
+            for (const customer of resp.data) {
+                console.log(customer.id,customer.name,customer.address,customer.tp);
+                let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.tp}</td></tr>`;
+                $("#customerTableJson").append(row);
+            }
+
+        }
+
+    });
+
+    /*$.ajax({
+        url: "customer?option=GETALL",
+        method: "GET",
+
+        success : function (resp) {
+
+            for (const customer of resp.data){
+                let row = `<tr><td>${i.getId()}</td><td>${i.getName()}</td><td>${i.getAddress()}</td><td>${i.getTp()}</td></tr>`;
+                $("#customerTable").append(row);
+            }
+        }
+    });*/
     /*$("#customerTable").empty();
     customerDB.forEach(function (i) {
         let row = `<tr><td>${i.getId()}</td><td>${i.getName()}</td><td>${i.getAddress()}</td><td>${i.getTp()}</td></tr>`;
@@ -131,7 +168,6 @@ function loadAllCustomer() {
     }
 
 });*/
-
 
 
 /*customer delete*/

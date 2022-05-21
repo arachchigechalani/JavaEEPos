@@ -4,10 +4,7 @@ import dao.DAOFactory;
 import dao.custom.CustomerDAO;
 import entity.Customer;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebServlet(urlPatterns = "/customer")
 public class CustomerBOServlet extends HttpServlet {
@@ -74,4 +72,55 @@ public class CustomerBOServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String option=req.getParameter("option");
+        resp.setContentType("application/json");
+        switch (option){
+
+            case "GETALL" :
+
+                try {
+                    ArrayList<Customer> all = customerDAO.getAll();
+
+                    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+
+
+                    for (Customer customer : all) {
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        objectBuilder.add("id", customer.getId());
+                        objectBuilder.add("name" , customer.getName());
+                        objectBuilder.add("address",customer.getAddress());
+                        objectBuilder.add("tp",customer.getTp());
+
+                        arrayBuilder.add(objectBuilder.build());
+
+                    }
+
+
+                    JsonObjectBuilder response = Json.createObjectBuilder();
+                    response.add("status" , 200);
+                    response.add("message" , "Done");
+                    response.add("data" , arrayBuilder.build());
+
+                    PrintWriter writer = resp.getWriter();
+                    writer.print(response.build());
+
+
+
+
+                } catch (SQLException e) {
+
+                    throw new RuntimeException(e);
+
+                } catch (ClassNotFoundException e) {
+
+                    throw new RuntimeException(e);
+                }
+                break;
+
+        }
+    }
+
 }
