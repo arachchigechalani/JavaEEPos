@@ -1,15 +1,18 @@
 //loadAllCustomer();
 
 function customerAddOrUpdate() {
-
+    var id = $("#txtCusID").val();
+    var    name = $("#txtCusName").val();
+     var   address = $("#txtCusAddress").val();
+     var   tp = $("#txtCusTP").val();
 
     var cus={
-        id : $("#txtCusID").val(),
-        name : $("#txtCusName").val(),
-        address : $("#txtCusAddress").val(),
-        tp : $("#txtCusTP").val()
+        id :id,
+        name : name,
+        address : address,
+        tp : tp
     }
-    alert("ok");
+
     $.ajax({
         url: "customer",
         method: "POST",
@@ -17,9 +20,15 @@ function customerAddOrUpdate() {
         data : JSON.stringify(cus),
 
         success : function (res){
-
+            if (res.status==200){
+                alert(res.message);
+            }else if (res.status==400){
+                alert(res.data);
+            }else {
+                alert(res.data);
+            }
         }
-    })
+    });
 
 
     /*var id = $("#txtCusID").val();
