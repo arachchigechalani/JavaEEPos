@@ -100,30 +100,30 @@ function loadAllCustomer() {
 
     });
 
-    /*$.ajax({
-        url: "customer?option=GETALL",
-        method: "GET",
-
-        success : function (resp) {
-
-            for (const customer of resp.data){
-                let row = `<tr><td>${i.getId()}</td><td>${i.getName()}</td><td>${i.getAddress()}</td><td>${i.getTp()}</td></tr>`;
-                $("#customerTable").append(row);
-            }
-        }
-    });*/
-    /*$("#customerTable").empty();
-    customerDB.forEach(function (i) {
-        let row = `<tr><td>${i.getId()}</td><td>${i.getName()}</td><td>${i.getAddress()}</td><td>${i.getTp()}</td></tr>`;
-        $("#customerTable").append(row);
-    });*/
 }
 
 /*search customer*/
 //var customerExist = 0;
-/*$("#customerSearchBtn").click(function () {
+$("#customerSearchBtn").click(function () {
 
-    var txtsearch = $("#txtSearchCusID").val();
+    $.ajax({
+        url :"customer?option=GETONE&id="+$("#txtSearchCusID").val(),
+        method : "GET",
+        success : function (res){
+            if (res.status==200){
+               let row = `<tr><td>${res.data.id}</td><td>${res.data.name}</td><td>${res.data.address}</td><td>${res.data.tp}</td>`
+                $("#customerTableJson").empty();
+                $("#customerTableJson").append(row);
+
+            }else if(res.status==400){
+                alert(res.message);
+            }
+        }
+
+
+});
+
+    /*var txtsearch = $("#txtSearchCusID").val();
     for (var i of customerDB) {
         if (i.getId() == txtsearch) {
             $("#customerTable").empty();
@@ -141,9 +141,44 @@ function loadAllCustomer() {
         alert("Customer not found ");
     }
 
-    showUpdateModal();
+    showUpdateModal();*/
 
-});*/
+});
+
+
+
+
+
+
+/*customer delete*/
+
+$("#btnCustomerDelete").click(function () {
+
+    $.ajax({
+        url :"customer?id="+$("#txtSearchCusID").val(),
+        method : "DELETE",
+        success : function (res){
+
+            if (res.status == 200){
+                alert(res.message);
+                $("#customerTableJson").empty();
+            }else if(res.status == 400){
+                alert(res.message);
+            }
+
+
+        }
+    });
+
+});
+
+
+
+
+
+
+
+
 
 
 /*Update Customer*/
@@ -169,25 +204,6 @@ function loadAllCustomer() {
 
 });*/
 
-
-/*customer delete*/
-
-/*
-$("#btnCustomerDelete").click(function () {
-
-    var custId = $("#txtSearchCusID").val();
-
-    for (var i in customerDB) {
-        if (custId == customerDB[i].getId()) {
-            customerDB.splice(i, 1);
-            loadAllCustomer();
-            alert("Customer Delete Complete");
-            break;
-        }
-    }
-
-});
-*/
 
 
 //customer validation

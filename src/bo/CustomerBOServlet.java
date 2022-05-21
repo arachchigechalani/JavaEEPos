@@ -79,6 +79,69 @@ public class CustomerBOServlet extends HttpServlet {
         resp.setContentType("application/json");
         switch (option){
 
+
+            case "GETONE" :
+
+                try {
+
+                    if(customerDAO.ifCustomerExist(req.getParameter("id"))){
+
+                        Customer cus = customerDAO.search(req.getParameter("id"));
+
+                        JsonObjectBuilder jsonOb = Json.createObjectBuilder();
+                        jsonOb.add("id",cus.getId());
+                        jsonOb.add("name",cus.getName());
+                        jsonOb.add("address",cus.getAddress());
+                        jsonOb.add("tp",cus.getTp());
+
+                        JsonObjectBuilder response = Json.createObjectBuilder();
+                        response.add("status",200);
+                        response.add("data",jsonOb.build());
+
+                        PrintWriter writer = resp.getWriter();
+                        writer.print(response.build());
+
+
+                    }else {
+
+                        JsonObjectBuilder response = Json.createObjectBuilder();
+                        response.add("status",400);
+                        response.add("message" , "Customer Not Found");
+                        PrintWriter writer = resp.getWriter();
+                        writer.print(response.build());
+
+                    }
+
+
+                } catch (SQLException e) {
+                    JsonObjectBuilder response = Json.createObjectBuilder();
+                    response.add("status", 400);
+                    response.add("message", "Error");
+                    response.add("data", e.getLocalizedMessage());
+                    PrintWriter writer = resp.getWriter();
+                    writer.print(response.build());
+
+                    resp.setStatus(HttpServletResponse.SC_OK); //200
+
+                    throw new RuntimeException(e);
+
+                } catch (ClassNotFoundException e) {
+                    JsonObjectBuilder response = Json.createObjectBuilder();
+                    response.add("status", 400);
+                    response.add("message", "Error");
+                    response.add("data", e.getLocalizedMessage());
+                    PrintWriter writer = resp.getWriter();
+                    writer.print(response.build());
+
+                    resp.setStatus(HttpServletResponse.SC_OK); //200
+
+                    throw new RuntimeException(e);
+                }
+                break;
+
+
+
+
             case "GETALL" :
 
                 try {
@@ -98,7 +161,6 @@ public class CustomerBOServlet extends HttpServlet {
 
                     }
 
-
                     JsonObjectBuilder response = Json.createObjectBuilder();
                     response.add("status" , 200);
                     response.add("message" , "Done");
@@ -106,8 +168,6 @@ public class CustomerBOServlet extends HttpServlet {
 
                     PrintWriter writer = resp.getWriter();
                     writer.print(response.build());
-
-
 
 
                 } catch (SQLException e) {
@@ -123,4 +183,57 @@ public class CustomerBOServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
+        PrintWriter writer = resp.getWriter();
+        resp.setContentType("application/json");
+
+        try {
+
+            if (customerDAO.delete(id)) {
+
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                objectBuilder.add("status", 200);
+                objectBuilder.add("data", "");
+                objectBuilder.add("message", "Successfully Deleted");
+                writer.print(objectBuilder.build());
+            } else {
+
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                objectBuilder.add("status", 400);
+                objectBuilder.add("data", "");
+                objectBuilder.add("message", "Customer Deleted Fail");
+                writer.print(objectBuilder.build());
+
+            }
+
+
+        } catch (SQLException e) {
+
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("status", 400);
+            response.add("message", "Error");
+            response.add("data", e.getLocalizedMessage());
+            writer.print(response.build());
+
+            resp.setStatus(HttpServletResponse.SC_OK); //200
+
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("status", 400);
+            response.add("message", "Error");
+            response.add("data", e.getLocalizedMessage());
+            writer.print(response.build());
+
+            resp.setStatus(HttpServletResponse.SC_OK); //200
+
+
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }
