@@ -1,37 +1,113 @@
 loadAllItem();
 
 function itemAddOrUpdate() {
-    //getting input values of textFields
-    var code = $("#itemCode").val();
-    var name = $("#itemName").val();
-    var price = $("#itemPrice").val();
-    var qty = $("#itemQty").val();
+    var code=$("#itemCode").val();
+    var name=$("#itemName").val();
+    var price=$("#itemPrice").val();
+    var quantity=$("#itemQty").val();
+
+    var item={
+        code:code,
+        name:name,
+        price:price,
+        quantity:quantity
+    }
 
 
-    var itemExits = 0;
-    let itemOb = new Item(code, name, price, qty);
-    for (var i in itemDB) {
-        if (code == itemDB[i].getCode()) {
-            alert("Item AllReadyExits..")
-            itemExits = 1;
-            break;
+    $.ajax({
+        url: "item",
+        method : "POST",
+        contentType : "application/json",
+        data : JSON.stringify(item),
+
+        success : function (res){
+            if (res.status==200){
+                alert(res.message);
+
+            }else if (res.status==400){
+                alert(res.message)
+
+            }else {
+                alert(res.data);
+
+            }
         }
-    }
-    if (itemExits == 0) {
-        itemDB.push(itemOb);
-        loadAllItem();
-        alert("Item Added SuccessFull..")
-    }
 
-    showUpdateModal();
-
+    });
 }
 
-$("#btnItemSave").click(function () {
+$("#itemSave").click(function () {
+    alert("ok");
     itemAddOrUpdate();
 });
 
 
+
+/*Search Item*/
+
+$("#itemBtnSearch").click(function () {
+    $.ajax({
+        url: "item?option=GETONE&id="+$("#txtSearchItemCode").val(),
+        method: "GET",
+
+        success : function (res){
+            if (res.status==200){
+
+                $("#itemCode").val(res.data.code);
+                $("#itemName").val(res.data.name);
+                $("#itemPrice").val(res.data.price);
+                $("#itemQty").val(res.data.quantity);
+
+            }else if (res.status==400){
+                alert("Item not found");
+            }
+        },
+
+        error : function (res){
+            alert("System Error");
+        }
+
+
+    })
+    /*showUpdateModal();*/
+});
+
+
+function loadAllItem() {
+
+    $.ajax({
+        url: "item?option=GETALL",
+        method: "GET",
+
+        success : function (res){
+            if (res.status==200){
+
+                $("#itemCode").val(res.data.code);
+                $("#itemName").val(res.data.name);
+                $("#itemPrice").val(res.data.price);
+                $("#itemQty").val(res.data.quantity);
+
+                $("#itemTable").empty();
+                for (const item of res.data){
+                    let row = `<tr><td>${item.code}</td><td>${item.name}</td><td>${item.price}</td><td>${item.quantity}</td></tr>`;
+                    $("#itemTable").append(row);
+                }
+
+
+            }else if (res.status==400){
+                alert("Item not found");
+            }
+        },
+
+        error : function (res){
+            alert("System Error");
+        }
+    })
+}
+
+
+
+/*
 function showUpdateModal() {
     $("#itemTable>tr").on('dblclick', function (e) {
 
@@ -45,45 +121,19 @@ function showUpdateModal() {
 
     });
 }
+*/
 
 
-function loadAllItem() {
-    $("#itemTable").empty();
-    itemDB.forEach(function (i) {
-        //create a html row
-        let row = `<tr><td>${i.getCode()}</td><td>${i.getName()}</td><td>${i.getPrice()}</td><td>${i.getQty()}</td></tr>`;
-        $("#itemTable").append(row);
-    })
-}
 
-/*Search Item*/
-var itemExist = 0;
-$("#itemBtnSearch").click(function () {
 
-    var txtsearch = $("#txtSearchItemCode").val();
-    for (var i in itemDB) {
-        if (txtsearch == itemDB[i].getCode()) {
-            $("#itemTable").empty();
-            let row = `<tr><td>${itemDB[i].getCode()}</td><td>${itemDB[i].getName()}</td><td>${itemDB[i].getPrice()}</td><td>${itemDB[i].getQty()}</td></tr>`;
-            $("#itemTable").append(row);
-            itemExist = 1;
-            break;
 
-        } else {
-            customerExist = 0;
-        }
-    }
 
-    if (itemExist == 0) {
-        alert("Item not found ");
-    }
 
-    showUpdateModal();
 
-});
 
 
 /*Update Item*/
+/*
 $("#btnUpdateItem").click(function () {
     for (var i in itemDB) {
         if ($("#itemUpdateCode").val() == itemDB[i].getCode()) {
@@ -106,21 +156,25 @@ $("#btnUpdateItem").click(function () {
 
 });
 
+*/
 
 /*customer delete*/
-
-
 $("#btnItemDelete").click(function () {
+    $.ajax({
+        url :"item?id="+$("#txtSearchItemCode").val(),
+        method : "DELETE",
+        success : function (res){
 
-    var itemCode = $("#txtSearchItemCode").val();
+            if (res.status == 200){
+                alert(res.message);
+            }else if(res.status == 400){
+                alert(res.message);
+            }
 
-    for (var i in itemDB) {
-        if (itemCode == itemDB[i].getCode()) {
-            itemDB.splice(i, 1);
-            loadAllItem();
-            alert("Item Delete Complete");
-            break;
+        },
+
+        error : function (){
+            alert("System error");
         }
-    }
-
+    });
 });

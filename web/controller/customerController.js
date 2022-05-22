@@ -34,27 +34,7 @@ function customerAddOrUpdate() {
             }
         }
     });
-
-
-    /*var id = $("#txtCusID").val();
-    var name = $("#txtCusName").val();
-    var address = $("#txtCusAddress").val();
-    var tp = $("#txtCusTP").val();*/
-
-    /*var customerExist = 0;
-    for (var i in customerDB) {
-        if (id == customerDB[i].getId()) {
-            alert("Customer Allready Exist !");
-            customerExist = 1;
-        }
-    }
-    if (customerExist == 0) {
-        customerDB.push(new Customer(id, name, address, tp));
-        loadAllCustomer();
-        alert("Customer Added SuccessFull..")
-    }
-
-    showUpdateModal();*/
+    //showUpdateModal();
 
 }
 
@@ -63,21 +43,6 @@ $("#btnSave").click(function () {
     loadAllCustomer();
 
 });
-
-
-/*function showUpdateModal() {
-    $("#customerTable>tr").on('dblclick', function (e) {
-
-        $("#updateCustomer #updateCusID").val($(this).children(':eq(0)').text());
-        $("#updateCustomer #updateCusID").prop("disabled", true);
-        $("#updateCustomer #updateCusName").val($(this).children(':eq(1)').text());
-        $("#updateCustomer #updateCusAddress").val($(this).children(':eq(2)').text());
-        $("#updateCustomer #updateCusTP").val($(this).children(':eq(3)').text());
-
-        $("#updateCustomer").modal('show');
-
-    });
-}*/
 
 function loadAllCustomer() {
 
@@ -103,7 +68,7 @@ function loadAllCustomer() {
 }
 
 /*search customer*/
-//var customerExist = 0;
+
 $("#customerSearchBtn").click(function () {
 
     $.ajax({
@@ -147,9 +112,6 @@ $("#customerSearchBtn").click(function () {
 
 
 
-
-
-
 /*customer delete*/
 
 $("#btnCustomerDelete").click(function () {
@@ -174,6 +136,19 @@ $("#btnCustomerDelete").click(function () {
 
 
 
+/*function showUpdateModal() {
+    $("#customerTable>tr").on('dblclick', function (e) {
+
+        $("#updateCustomer #updateCusID").val($(this).children(':eq(0)').text());
+        $("#updateCustomer #updateCusID").prop("disabled", true);
+        $("#updateCustomer #updateCusName").val($(this).children(':eq(1)').text());
+        $("#updateCustomer #updateCusAddress").val($(this).children(':eq(2)').text());
+        $("#updateCustomer #updateCusTP").val($(this).children(':eq(3)').text());
+
+        $("#updateCustomer").modal('show');
+
+    });
+}*/
 
 
 
