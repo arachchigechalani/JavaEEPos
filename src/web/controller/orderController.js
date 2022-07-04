@@ -1,6 +1,8 @@
 genarateOrderId();
+/*
 genarateResOrderId();
 updateDate();
+*/
 
 function updateDate() {
     let now = new Date();
@@ -28,9 +30,6 @@ $("#btnOrderCusSearch").click(function () {
                 alert(res.message);
             }
         }
-
-
-
     });
 });
 //customer search End
@@ -42,29 +41,32 @@ $("#btnOrderCusSearch").click(function () {
 
 //search Item start
 $("#txtSelectItemCode").on('keyup', function (e) {
-    $.ajax({
-        url: "item?option=GETONE&id="+$("#txtSearchItemCode").val(),
-        method: "GET",
+    if (e.key=="Enter") {
+        $.ajax({
+            url: "item?option=GETONE&id=" + $("#txtSelectItemCode").val(),
+            method: "GET",
 
-        success : function (res){
-            if (res.status==200){
+            success: function (res) {
 
-                $("#itemCode").val(res.data.code);
-                $("#itemName").val(res.data.name);
-                $("#itemPrice").val(res.data.price);
-                $("#itemQty").val(res.data.quantity);
+                if (res.status == 200) {
 
-            }else if (res.status==400){
-                alert("Item not found");
+                    $("#txtSelectItemDescription").val(res.data.name);
+                    $("#txtSelectItemPrice").val(res.data.price);
+                    $("#txtSelectQTYOnHand").val(res.data.qty);
+
+                } else if (res.status == 400) {
+
+                    $("#txtSelectItemDescription").val("");
+                    $("#txtSelectItemPrice").val("");
+                    $("#txtSelectQTYOnHand").val("");
+                    alert("Item not found");
+                }
+            },
+            error: function (res) {
+                alert("System Error");
             }
-        },
-
-        error : function (res){
-            alert("System Error");
-        }
-
-
-    })
+        })
+    }
 });
 //search Item End
 
@@ -167,73 +169,8 @@ function keyPress() {
     } else {
         $("#txtBalance").val('');
     }
-
-
-    /*  if (discount!='' && cash!=''){
-
-          alert("ok");
-           /!* $("#subtotal").text(itemFinallytotal);
-
-            if (cash==''){
-                alert("cash");
-                $("#txtBalance").val('');
-            }else {
-                alert("cashFound");}
-          $("#txtBalance").val('');
-          $("#txtBalance").val(cash-subTotal);
-
-      }else {
-          $("#subtotal").text('');
-          $("#subtotal").text(total);*!/
-      }else {
-          alert("no");
-      }*/
-    /*
-              if(discount==''){
-
-              }*/
-
-
-    /*   if (discount!=''){
-           var balance=cash-subTotal;
-           $("#txtBalance").val('');
-           $("#txtBalance").val(balance);
-
-       }else {
-           $("#subtotal").text(total);
-           var balance=cash-subTotal;
-           $("#txtBalance").val('');
-           $("#txtBalance").val(balance);
-       }
-
-       if (cash!=''){
-           var balance=cash-subTotal;
-           $("#txtBalance").val('');
-           $("#txtBalance").val(balance);
-
-
-       }else {
-           $("#txtBalance").val('');
-       }
-   */
-
 }
 
-
-/*
-function genarateOrderId() {
-    var array=new Array();
-
-    for (var i in customerDB){
-        if ((customerDB[i].getCustomerOrder().length)!=0){
-
-            var orderArray=customerDB[i].getCustomerOrder();
-            array.push( orderArray[orderArray.length-1].getOrderId());
-        }
-    }
-    array.sort();
-    alert(array[array.length-1]);
-}*/
 
 
 //purchase order start
@@ -243,41 +180,55 @@ $("#btnSubmitOrder").click(function () {
     let res = confirm("Place order?");
     if (res) {
 
+        var orderId = $("#txtOrderID").val();
+        var custId = $("#orderCustomerID").val();
+        var date = $("#txtDate").val();
+        var cost = $("#subtotal").val();
+        var discount = $("#txtDiscount").val();
 
-        if (genarateResOrderId() == $("#txtOrderID").val()) {
-
-
-            var orderId = $("#txtOrderID").val();
-            var custId = $("#orderCustomerID").val();
-            var date = $("#txtDate").val();
-            var cost = $("#subtotal").val();
-            var discount = $("#txtDiscount").val();
-
-            var order = new Order(orderId, custId, date, discount, cost);
+        var order = new Order(orderId, custId, date, discount, cost);
 
 
-            var orderDetailsArray = order.getOrderDetails();
-            for (var i in cartItems) {
-                orderDetailsArray.push(new OrderDetails(cartItems[i].getItemCode(), cartItems[i].getItemName(), cartItems[i].getItemQty(), cartItems[i].getItemPrice()));
-            }
-
-            orders.push(order);
-
-            alert("order Placed Complete");
-            clearAll();
-
-            //loading next orderId when purchase is complete
-            genarateOrderId();
-
-            updateDate();
-
-        } else {
-            alert("Order Fail OrderId Incorrect");
-            let res = confirm("Automatically reset order ID?");
-            if (res) {
-                genarateOrderId();
-            }
+        var orderDetailsArray = order.getOrderDetails();
+        for (var i in cartItems) {
+            orderDetailsArray.push(new OrderDetails(cartItems[i].getItemCode(), cartItems[i].getItemName(), cartItems[i].getItemQty(), cartItems[i].getItemPrice()));
         }
+
+        var order={
+            orderId : $("#txtOrderID").val(),
+            custId  : $("#orderCustomerID").val(),
+            date    : $("#txtDate").val()
+        }
+
+        $.ajax({
+
+            url: "order",
+            method : "POST",
+            contentType : "application/json",
+            data : JSON.stringify(order),
+
+            success : function (res){
+                if (res.status==200){
+                    alert(res.message);
+                    clearAll();
+
+
+                }else if (res.status==400){
+                    alert(res.message);
+                }
+            },
+
+            error : function (res){
+
+
+            }
+
+        });
+
+        //loading next orderId when purchase is complete
+        genarateOrderId();
+
+        updateDate();
 
     } else {
         alert("order cancelld");
@@ -289,30 +240,19 @@ $("#btnSubmitOrder").click(function () {
 
 //generate orderId automatically
 function genarateOrderId() {
-    if (orders.length != 0) {
+    $.ajax({
+        url : "order?option=GenarateNewId",
+        method : "GET",
 
-        let lastrecord = orders[orders.length - 1].getOrderId();
-        let split = lastrecord.split("-");
-        let splitElement = ++split[1];
-        if (splitElement < 10 && splitElement > 0) {
-            let genarateId = "O00-" + "00" + splitElement;
-            $("#txtOrderID").val(genarateId);
+        success : function (res){
+            $("#txtOrderID").val(res.data);
+        },
 
-        } else if (splitElement > 99) {
-            let genarateId = "O00-" + splitElement
-            $("#txtOrderID").val(genarateId);
-
-
-        } else {
-            let genarateId = "O00-001"
-            $("#txtOrderID").val(genarateId);
+        error : function (){
 
         }
-    } else {
-        let genarateId = "O00-001"
-        $("#txtOrderID").val(genarateId);
 
-    }
+    });
 }
 
 
@@ -417,11 +357,7 @@ $("#txtOrderID").on('keydown', function (event) {
 
                     break;
                 }
-
             }
-
         }
-
     }
-
 });
