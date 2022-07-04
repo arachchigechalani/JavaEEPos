@@ -1,10 +1,11 @@
 loadAllItem();
 
 function itemAddOrUpdate() {
-    var code=$("#itemCode").val();
-    var name=$("#itemName").val();
-    var price=$("#itemPrice").val();
-    var qty=$("#itemQty").val();
+
+    var code=$("#txtItemCode").val();
+    var name=$("#txtItemName").val();
+    var price=$("#txtItemPrice").val();
+    var qty=$("#txtItemQty").val();
 
     var item={
         code:code,
@@ -23,6 +24,7 @@ function itemAddOrUpdate() {
         success : function (res){
             if (res.status==200){
                 alert(res.message);
+                loadAllItem();
 
             }else if (res.status==400){
                 alert(res.message)
@@ -36,13 +38,15 @@ function itemAddOrUpdate() {
     });
 }
 
-$("#itemSave").click(function () {
-    alert("ok");
+$("#btnItemSave").click(function () {
     itemAddOrUpdate();
+    loadAllItem();
 });
 
 
 function loadAllItem() {
+
+    //$("#itemTable").empty();
 
     $.ajax({
         url: "item?option=GETALL",
@@ -50,11 +54,6 @@ function loadAllItem() {
 
         success : function (res){
             if (res.status==200){
-
-                $("#itemCode").val(res.data.code);
-                $("#itemName").val(res.data.name);
-                $("#itemPrice").val(res.data.price);
-                $("#itemQty").val(res.data.qty);
 
                 $("#itemTable").empty();
                 for (const item of res.data){
@@ -78,6 +77,7 @@ function loadAllItem() {
 /*Search Item*/
 
 $("#itemBtnSearch").click(function () {
+
     $.ajax({
         url: "item?option=GETONE&id="+$("#txtSearchItemCode").val(),
         method: "GET",
@@ -85,10 +85,15 @@ $("#itemBtnSearch").click(function () {
         success : function (res){
             if (res.status==200){
 
-                $("#itemCode").val(res.data.code);
+                /*$("#itemCode").val(res.data.code);
                 $("#itemName").val(res.data.name);
                 $("#itemPrice").val(res.data.price);
                 $("#itemQty").val(res.data.qty);
+*/
+                $("#itemTable").empty();
+
+                let row = `<tr><td>${res.data.code}</td><td>${res.data.name}</td><td>${res.data.price}</td><td>${res.data.qty}</td></tr>`;
+                $("#itemTable").append(row);
 
             }else if (res.status==400){
                 alert("Item not found");
@@ -98,8 +103,6 @@ $("#itemBtnSearch").click(function () {
         error : function (res){
             alert("System Error");
         }
-
-
     })
     /*showUpdateModal();*/
 });
@@ -108,6 +111,7 @@ $("#itemBtnSearch").click(function () {
 
 /*customer delete*/
 $("#btnItemDelete").click(function () {
+
     $.ajax({
         url :"item?id="+$("#txtSearchItemCode").val(),
         method : "DELETE",
@@ -115,6 +119,8 @@ $("#btnItemDelete").click(function () {
 
             if (res.status == 200){
                 alert(res.message);
+                $("#itemTable").empty();
+                loadAllItem();
             }else if(res.status == 400){
                 alert(res.message);
             }
@@ -126,6 +132,16 @@ $("#btnItemDelete").click(function () {
         }
     });
 });
+
+
+
+
+
+
+
+
+
+
 
 
 

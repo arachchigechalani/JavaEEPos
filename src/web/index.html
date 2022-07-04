@@ -221,20 +221,20 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="mb-3">
-                                        <label for="itemCode" class="form-label">Item Code</label>
-                                        <input type="email" class="form-control"  id="itemCode" aria-describedby="emailHelp">
+                                        <label for="txtItemCode" class="form-label">Item Code</label>
+                                        <input type="email" class="form-control"  id="txtItemCode" aria-describedby="emailHelp">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="itemName" class="form-label" >Item Name</label>
-                                        <input type="email" class="form-control" id="itemName" aria-describedby="emailHelp">
+                                        <label for="txtItemName" class="form-label" >Item Name</label>
+                                        <input type="email" class="form-control" id="txtItemName" aria-describedby="emailHelp">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="itemPrice" class="form-label" >Price</label>
-                                        <input type="email" class="form-control" id="itemPrice" aria-describedby="emailHelp">
+                                        <label for="txtItemPrice" class="form-label" >Price</label>
+                                        <input type="email" class="form-control" id="txtItemPrice" aria-describedby="emailHelp">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="itemQty" class="form-label" >Quantity</label>
-                                        <input type="email" class="form-control" id="itemQty" aria-describedby="emailHelp">
+                                        <label for="txtItemQty" class="form-label" >Quantity</label>
+                                        <input type="email" class="form-control" id="txtItemQty" aria-describedby="emailHelp">
                                     </div>
 
                                 </div>
@@ -524,7 +524,7 @@
         </section>
 
         <!--row-->
-        <table class="table table-success table-striped">
+        <table class="table table-bordered table-hover">
             <thead class="table-info">
             <tr>
                 <th>Customer ID</th>
@@ -760,27 +760,19 @@
 <script src="db/DB.js"></script>
 <script src="model/OrderCart.js"></script>
 
-<!--customer imports-->
+
 <!--<script src="model/Customer.js"></script>-->
 <script src="controller/customerController.js"></script>
+<script src="controller/ItemController.js"></script>
+<script src="controller/orderController.js"></script>
 
-<!--item imports-->
-<!--
+
 <script src="model/Item.js"></script>
 <script src="model/Order.js"></script>
 <script src="model/OrderDetails.js"></script>
 <script src="model/OrderCart.js"></script>
-<script src="controller/ItemController.js"></script>
-<script src="controller/orderController.js"></script>
--->
 
 <script>
-
-    /*document.getElementsByClassName("nav-link active")[0].style.fontSize="30px";
-    document.getElementById("orderid").style.fontSize="30px";
-    document.getElementById("itemid").style.fontSize="30px";
-    document.getElementsByClassName("nav-link dropdown-toggle")[0].style.fontSize="30px";
-*/
     $("#navContent").show();
     $("#dh").show();
     $("#customerContent").hide();
@@ -814,13 +806,7 @@
         $("#purchaseContent").hide();
         $("#itemContent").hide();
     });
-
-
-
-
-
 </script>
-
 
 </body>
 </html>

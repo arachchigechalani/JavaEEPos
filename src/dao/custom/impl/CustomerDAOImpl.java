@@ -11,6 +11,11 @@ import java.util.ArrayList;
 public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
+    public boolean ifCustomerExist(String id) throws SQLException, ClassNotFoundException {
+        return CrudUtil.executeQuery("SELECT custId FROM Customer WHERE custId=?", id).next();
+    }
+
+    @Override
     public boolean add(Customer customer) throws SQLException, ClassNotFoundException {
         return CrudUtil.executeUpdate("INSERT INTO Customer (custId,custName,custAddress,tp) VALUES (?,?,?,?)",customer.getId(),customer.getName(),customer.getAddress(),customer.getTp());
     }
@@ -45,10 +50,5 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
         return allCustomers;
 
-    }
-
-    @Override
-    public boolean ifCustomerExist(String id) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeQuery("SELECT custId FROM Customer WHERE custId=?", id).next();
     }
 }

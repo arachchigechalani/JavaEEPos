@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class CustomerBOServlet extends HttpServlet {
 
     CustomerDAO customerDAO= (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -31,7 +32,7 @@ public class CustomerBOServlet extends HttpServlet {
         String address=jsonObject.getString("address");
         String tp=jsonObject.getString("tp");
 
-        System.out.println(id+" "+name+" "+address+" "+tp);
+        //System.out.println(id+" "+name+" "+address+" "+tp);
 
         JsonObjectBuilder response = Json.createObjectBuilder();
         PrintWriter writer = resp.getWriter();
@@ -75,6 +76,7 @@ public class CustomerBOServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setStatus(HttpServletResponse.SC_CREATED);//201
         String option=req.getParameter("option");
         resp.setContentType("application/json");
         switch (option){

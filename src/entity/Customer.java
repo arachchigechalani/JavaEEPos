@@ -4,11 +4,10 @@ public class Customer {
     private String id;
     private String name;
     private String address;
+    private String tp;
 
     public Customer() {
     }
-
-    private String tp;
 
     public Customer(String id, String name, String address, String tp) {
         this.id = id;

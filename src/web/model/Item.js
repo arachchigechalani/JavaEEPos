@@ -1,4 +1,5 @@
 function Item(code, name, price, qty) {
+
     var itemCode = code;
     var itemName = name;
     var itemPrice = price;

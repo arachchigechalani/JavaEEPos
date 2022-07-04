@@ -1,6 +1,7 @@
 loadAllCustomer();
 
 function customerAddOrUpdate() {
+
     var id = $("#txtCusID").val();
     var name = $("#txtCusName").val();
     var address = $("#txtCusAddress").val();
@@ -23,7 +24,6 @@ function customerAddOrUpdate() {
 
             if (res.status == 200) {
                 alert(res.message);
-                //clearAll();
                 loadAllCustomer();
 
             } else if (res.status == 400) {
@@ -33,8 +33,9 @@ function customerAddOrUpdate() {
             }
         }
     });
-//showUpdateModal() ;
+
 }
+
 
 $("#btnSave").click(function () {
     customerAddOrUpdate();
@@ -43,35 +44,20 @@ $("#btnSave").click(function () {
 });
 
 
-/*function showUpdateModal() {
-    $("#customerTable>tr").on('dblclick', function (e) {
-
-        $("#updateCustomer #updateCusID").val($(this).children(':eq(0)').text());
-        $("#updateCustomer #updateCusID").prop("disabled", true);
-        $("#updateCustomer #updateCusName").val($(this).children(':eq(1)').text());
-        $("#updateCustomer #updateCusAddress").val($(this).children(':eq(2)').text());
-        $("#updateCustomer #updateCusTP").val($(this).children(':eq(3)').text());
-
-        $("#updateCustomer").modal('show');
-
-    });
-}*/
-
 function loadAllCustomer() {
 
-    alert("load all Customer;");
-
-    $("#customerTableJson").empty();
+    $("#customerTable").empty();
 
     $.ajax({
         url: "customer?option=GETALL",
         method: "GET",
+
         success: function (resp) {
 
             for (const customer of resp.data) {
-                console.log(customer.id,customer.name,customer.address,customer.tp);
+                //console.log(customer.id, customer.name, customer.address, customer.tp);
                 let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.tp}</td></tr>`;
-                $("#customerTableJson").append(row);
+                $("#customerTable").append(row);
             }
 
         }
@@ -86,29 +72,51 @@ function loadAllCustomer() {
 $("#customerSearchBtn").click(function () {
 
     $.ajax({
-        url :"customer?option=GETONE&id="+$("#txtSearchCusID").val(),
-        method : "GET",
-        success : function (res){
-            if (res.status==200){
-                let row = `<tr><td>${res.data.id}</td><td>${res.data.name}</td><td>${res.data.address}</td><td>${res.data.tp}</td>`
-                $("#customerTableJson").empty();
-                $("#customerTableJson").append(row);
+        url: "customer?option=GETONE&id=" + $("#txtSearchCusID").val(),
+        method: "GET",
 
-            }else if(res.status==400){
+        success: function (res) {
+            if (res.status == 200) {
+                let row = `<tr><td>${res.data.id}</td><td>${res.data.name}</td><td>${res.data.address}</td><td>${res.data.tp}</td>`
+                $("#customerTable").empty();
+                $("#customerTable").append(row);
+
+            } else if (res.status == 400) {
                 alert(res.message);
             }
         }
 
 
     });
-    //showUpdateModal();
 
 });
 
 
+/*customer delete*/
 
+$("#btnCustomerDelete").click(function () {
+
+    $.ajax({
+        url: "customer?id=" + $("#txtSearchCusID").val(),
+        method: "DELETE",
+        success: function (res) {
+
+            if (res.status == 200) {
+                alert(res.message);
+                $("#customerTable").empty();
+                loadAllCustomer();
+            } else if (res.status == 400) {
+                alert(res.message);
+            }
+
+
+        }
+    });
+
+});
 
 /*Update Customer*/
+/*
 $("#btnUpdate").click(function () {
     for (var i in customerDB) {
         if ($("#updateCusID").val() == customerDB[i].getId()) {
@@ -131,25 +139,21 @@ $("#btnUpdate").click(function () {
 
 });
 
+*/
 
+/*function showUpdateModal() {
+    $("#customerTable>tr").on('dblclick', function (e) {
 
+        $("#updateCustomer #updateCusID").val($(this).children(':eq(0)').text());
+        $("#updateCustomer #updateCusID").prop("disabled", true);
+        $("#updateCustomer #updateCusName").val($(this).children(':eq(1)').text());
+        $("#updateCustomer #updateCusAddress").val($(this).children(':eq(2)').text());
+        $("#updateCustomer #updateCusTP").val($(this).children(':eq(3)').text());
 
-/*customer delete*/
+        $("#updateCustomer").modal('show');
 
-$("#btnCustomerDelete").click(function () {
-
-    var custId = $("#txtSearchCusID").val();
-
-    for (var i in customerDB) {
-        if (custId == customerDB[i].getId()) {
-            customerDB.splice(i, 1);
-            loadAllCustomer();
-            alert("Customer Delete Complete");
-            break;
-        }
-    }
-
-});
+    });
+}*/
 
 
 /*
@@ -239,13 +243,4 @@ function validate(e) {
         $("#btnSave").prop('disabled', true);
     }
 }
-
-
-
-
-
-
-
-
-
 */
