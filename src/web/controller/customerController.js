@@ -53,7 +53,7 @@ function loadAllCustomer() {
         method: "GET",
 
         success: function (resp) {
-
+            //$("#customerTable").empty();
             for (const customer of resp.data) {
                 //console.log(customer.id, customer.name, customer.address, customer.tp);
                 let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.tp}</td></tr>`;
@@ -85,8 +85,6 @@ $("#customerSearchBtn").click(function () {
                 alert(res.message);
             }
         }
-
-
     });
 
 });

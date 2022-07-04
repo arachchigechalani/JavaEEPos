@@ -94,11 +94,10 @@ public class ItemBOServlet extends HttpServlet {
 
                 try {
 
+                    if(itemDAO.ifItemExist(req.getParameter("id"))){
 
-                    if(itemDAO.ifItemExist(req.getParameter("code"))){
 
-
-                        Item item = itemDAO.search(req.getParameter("code"));
+                        Item item = itemDAO.search(req.getParameter("id"));
 
                         System.out.println(item.getCode() + " " + item.getName() + " " + item.getPrice() + " " + item.getQty());
 
@@ -211,7 +210,7 @@ public class ItemBOServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String code = req.getParameter("code");
+        String code = req.getParameter("id");
         JsonObjectBuilder response = Json.createObjectBuilder();
         PrintWriter writer = resp.getWriter();
         resp.setContentType("application/json");
